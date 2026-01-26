@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Dior Sauvage",
+      "slug": "dior-sauvage",
+      "brand": "Dior",
+      "status": true,
+      "images": [
+        {
+          "id": 1,
+          "url": "/mock/images/dior.jpg",
+          "alt": "Dior",
+          "is_main": true
+        }
+      ],
+      "variants": [
+        {
+          "id": 1,
+          "sku": "DS-100",
+          "barcode": "123",
+          "price": "3200000",
+          "discount_price": "2900000",
+          "stock": 10
+        }
+      ]
+    }
+  ]
+}
