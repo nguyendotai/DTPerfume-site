@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "message": "Profile updated successfully",
+  "data": {
+    "id": 1,
+    "name": "Updated Mock User",
+    "email": "mock@example.com",
+    "avatar": null,
+    "phone": "0901234567",
+    "address": "Hà Nội, Việt Nam"
+  }
+}
