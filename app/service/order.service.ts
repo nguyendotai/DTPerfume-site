@@ -1,15 +1,13 @@
 import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
-import { readMockServer } from "../lib/mock.server";
-import { readMockClient } from "../lib/mock.client";
 import { Order } from "../types/order";
+import { ordersMock } from "../mock/orders.mock"; // đổi đúng path mock của bạn
 
 /**
  * Lấy danh sách đơn hàng của user
  */
 export async function getUserOrders(userId: number): Promise<Order[]> {
   if (USE_MOCK) {
-    const mock = await readMockClient<{ data: Order[] }>("orders.json");
-    return mock.data ?? [];
+    return ordersMock.filter((o) => o.user_id === userId);
   }
 
   const res = await fetch(`${BASE_API_URL}/orders/user/${userId}`, {
@@ -28,8 +26,7 @@ export async function getUserOrders(userId: number): Promise<Order[]> {
  */
 export async function getOrderDetail(orderId: number): Promise<Order | null> {
   if (USE_MOCK) {
-    const mock = await readMockClient<{ data: Order }>("order-detail.json");
-    return mock.data ?? null;
+    return ordersMock.find((o) => o.id === orderId) ?? null;
   }
 
   const res = await fetch(`${BASE_API_URL}/orders/${orderId}`, {
@@ -48,6 +45,11 @@ export async function getOrderDetail(orderId: number): Promise<Order | null> {
  * Lấy trạng thái đơn hàng
  */
 export async function getOrderStatus(orderId: number) {
+  if (USE_MOCK) {
+    const order = ordersMock.find((o) => o.id === orderId);
+    return order?.status ?? null;
+  }
+
   const res = await fetch(`${BASE_API_URL}/orders/status/${orderId}`, {
     cache: "no-store",
     credentials: "include",

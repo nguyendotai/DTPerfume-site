@@ -1,77 +1,97 @@
-import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
-import { readMockClient } from "../lib/mock.client";
 import {
   LoginPayload,
   RegisterPayload,
   UpdateProfilePayload,
 } from "../types/auth";
+import { authMock } from "../mock/auth.mock"; // đổi đúng path mock của bạn
 
 const AUTH_ENDPOINT = "/auth";
 
 /* LOGIN */
-export async function loginService(payload: LoginPayload) {
-  if (USE_MOCK) {
-    return readMockClient("auth-login.json");
+export const loginService = async (payload: LoginPayload) => {
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return authMock.login(payload.email, payload.password);
+  } else {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${AUTH_ENDPOINT}/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || data.message || "Đăng nhập thất bại!");
+
+    return data;
   }
-
-  const res = await fetch(`${BASE_API_URL}${AUTH_ENDPOINT}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-
-  if (!res.ok) throw new Error((await res.json()).message);
-  return res.json();
-}
+};
 
 /* REGISTER */
-export async function registerService(payload: RegisterPayload) {
-  if (USE_MOCK) {
-    return readMockClient("auth-register.json");
+export const registerService = async (payload: RegisterPayload) => {
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return authMock.register(payload);
+  } else {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${AUTH_ENDPOINT}/register`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || data.message || "Đăng ký thất bại!");
+
+    return data;
   }
-
-  const res = await fetch(`${BASE_API_URL}${AUTH_ENDPOINT}/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-
-  if (!res.ok) throw new Error((await res.json()).message);
-  return res.json();
-}
+};
 
 /* GET ME */
-export async function getMeService(token: string) {
-  if (USE_MOCK) {
-    return readMockClient("auth-me.json");
+export const getMeService = async (token: string) => {
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return authMock.getMe();
+  } else {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${AUTH_ENDPOINT}/me`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || data.message || "Lấy thông tin thất bại!");
+
+    return data;
   }
-
-  const res = await fetch(`${BASE_API_URL}${AUTH_ENDPOINT}/me`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  if (!res.ok) throw new Error((await res.json()).message);
-  return res.json();
-}
+};
 
 /* UPDATE PROFILE */
-export async function updateProfileService(
+export const updateProfileService = async (
   payload: UpdateProfilePayload,
   token: string
-) {
-  if (USE_MOCK) {
-    return readMockClient("auth-update.json");
+) => {
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return authMock.updateProfile(payload);
+  } else {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${AUTH_ENDPOINT}/update`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    const data = await res.json();
+    if (!res.ok)
+      throw new Error(data.error || data.message || "Cập nhật thất bại!");
+
+    return data;
   }
-
-  const res = await fetch(`${BASE_API_URL}${AUTH_ENDPOINT}/update`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!res.ok) throw new Error((await res.json()).message);
-  return res.json();
-}
+};

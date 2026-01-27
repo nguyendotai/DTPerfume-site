@@ -1,159 +1,144 @@
-import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
-import { readMockServer } from "../lib/mock.server";
-import { readMockClient } from "../lib/mock.client";
 import { Product } from "../types/product";
+import { productsMock } from "../mock/productMock"; // bạn đổi đúng path mock
 
 const PRODUCT_ENDPOINT = "/products";
 
 /**
  * Home products
  */
-export async function getHomeProducts(): Promise<Product[]> {
-  if (USE_MOCK) {
-    const mock = await readMockClient<{ data: Product[] }>("products.json");
-    return (mock.data ?? []).filter(Boolean);
+export const getHomeProducts = async (): Promise<Product[]> => {
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return productsMock.filter(Boolean);
+  } else {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}`,
+      { cache: "no-store" }
+    );
+
+    if (!res.ok) throw new Error("Fetch home products failed");
+
+    const data = await res.json();
+    return Array.isArray(data.data) ? data.data.filter(Boolean) : [];
   }
-
-  const res = await fetch(`${BASE_API_URL}/products`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) throw new Error("Fetch home products failed");
-
-  const json = await res.json();
-
-  return Array.isArray(json.data)
-    ? json.data.filter(Boolean)
-    : [];
-}
-
-
+};
 
 /**
  * Product detail
  */
-export const getProductDetail = async (slug: string) => {
-  const res = await fetch(`${BASE_API_URL}/products/${slug}`, {
-    cache: "no-store",
-  });
+export const getProductDetail = async (
+  slug: string
+): Promise<Product | null> => {
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return productsMock.find((p) => p.slug === slug) || null;
+  } else {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/${slug}`,
+      { cache: "no-store" }
+    );
 
-  if (res.status === 404) {
-    return null; // ✅
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error("Fetch product detail failed");
+
+    const data = await res.json();
+    return data?.data ?? null;
   }
-
-  if (!res.ok) {
-    throw new Error("Fetch product detail failed");
-  }
-
-  const json = await res.json();
-  console.log("API raw response:", json); // 👈 bắt buộc log lần đầu
-
-  return json?.data ?? null;
 };
-
 
 /**
  * New Arrivals
  */
-export async function getNewArrivals(): Promise<Product[]> {
-  if (USE_MOCK) {
-    const mock = await readMockClient<{ data: Product[] }>("products.json");
-    return (mock.data ?? []).filter(Boolean);
+export const getNewArrivals = async (): Promise<Product[]> => {
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return productsMock
+      .filter(Boolean);
+  } else {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/new-arrivals`,
+      { cache: "no-store" }
+    );
+
+    if (!res.ok) throw new Error("Fetch new arrivals failed");
+
+    const data = await res.json();
+    return Array.isArray(data.data) ? data.data : [];
   }
-
-  const res = await fetch(`${BASE_API_URL}${PRODUCT_ENDPOINT}/new-arrivals`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) throw new Error("Fetch new arrivals failed");
-
-  const json = await res.json();
-  return Array.isArray(json.data) ? json.data : [];
-}
+};
 
 /**
  * Best Sellers
  */
-export async function getBestSellers(): Promise<Product[]> {
-  if (USE_MOCK) {
-    const mock = await readMockClient<{ data: Product[] }>("products.json");
-    return (mock.data ?? []).filter(Boolean);
+export const getBestSellers = async (): Promise<Product[]> => {
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return productsMock
+      .filter(Boolean);
+  } else {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/bestsellers`,
+      { cache: "no-store" }
+    );
+
+    if (!res.ok) throw new Error("Fetch best sellers failed");
+
+    const data = await res.json();
+    return Array.isArray(data.data) ? data.data : [];
   }
-
-  const res = await fetch(`${BASE_API_URL}${PRODUCT_ENDPOINT}/bestsellers`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) throw new Error("Fetch best sellers failed");
-
-  const json = await res.json();
-  return Array.isArray(json.data) ? json.data : [];
-}
+};
 
 /**
  * Products by category slug
  */
-export async function getProductsByCategorySlug(
+export const getProductsByCategorySlug = async (
   slug: string,
   limit = 10
-): Promise<Product[]> {
-  if (USE_MOCK) {
-    const mock = await readMockClient<{ data: Product[] }>("products.json");
-    return (mock.data ?? []).filter(
-      (p) => p?.category?.slug === slug
-    ).slice(0, limit);
+): Promise<Product[]> => {
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return productsMock
+      .filter((p) => p?.category?.slug === slug)
+      .slice(0, limit);
+  } else {
+    const url = new URL(
+      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/category/${slug}`
+    );
+    url.searchParams.append("limit", limit.toString());
+
+    const res = await fetch(url.toString(), { cache: "no-store" });
+
+    if (!res.ok) throw new Error("Fetch products by category failed");
+
+    const data = await res.json();
+    return Array.isArray(data.data) ? data.data.filter(Boolean) : [];
   }
-
-  const url = new URL(
-    `${BASE_API_URL}${PRODUCT_ENDPOINT}/category/${slug}`
-  );
-  url.searchParams.append("limit", limit.toString());
-
-  const res = await fetch(url.toString(), {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    throw new Error("Fetch products by category failed");
-  }
-
-  const json = await res.json();
-
-  return Array.isArray(json.data)
-    ? json.data.filter(Boolean)
-    : [];
-}
+};
 
 /**
  * Search products by keyword
  */
-export async function searchProducts(
+export const searchProducts = async (
   keyword: string,
   limit = 6,
-  page = 1,
-): Promise<Product[]> {
+  page = 1
+): Promise<Product[]> => {
   if (!keyword.trim()) return [];
 
-  if (USE_MOCK) {
-    const mock = await readMockClient<{ data: Product[] }>("products.json");
-    return (mock.data ?? [])
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return productsMock
       .filter((p) =>
-        p?.name?.toLowerCase().includes(keyword.toLowerCase()),
+        p?.name?.toLowerCase().includes(keyword.toLowerCase())
       )
       .slice(0, limit);
+  } else {
+    const url = new URL(
+      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/search`
+    );
+    url.searchParams.append("keyword", keyword);
+    url.searchParams.append("limit", limit.toString());
+    url.searchParams.append("page", page.toString());
+
+    const res = await fetch(url.toString(), { cache: "no-store" });
+
+    if (!res.ok) throw new Error("Search products failed");
+
+    const data = await res.json();
+    return Array.isArray(data.data) ? data.data : [];
   }
-
-  const url = new URL(`${BASE_API_URL}${PRODUCT_ENDPOINT}/search`);
-  url.searchParams.append("keyword", keyword);
-  url.searchParams.append("limit", limit.toString());
-  url.searchParams.append("page", page.toString());
-
-  const res = await fetch(url.toString(), {
-    cache: "no-store",
-  });
-
-  if (!res.ok) throw new Error("Search products failed");
-
-  const json = await res.json();
-  return Array.isArray(json.data) ? json.data : [];
-}
+};

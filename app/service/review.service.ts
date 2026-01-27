@@ -1,6 +1,5 @@
 import { BASE_API_URL, USE_MOCK } from "../lib/api.config";
-import { readMockServer } from "../lib/mock.server";
-import { readMockClient } from "../lib/mock.client";
+import { reviewsMock } from "../mock/reviews.mock"; // đổi đúng path mock của bạn
 
 const REVIEW_ENDPOINT = "/reviews";
 
@@ -9,7 +8,16 @@ export async function createReviewService(
   payload: { product_id: number; rating: number; comment: string },
   token: string
 ) {
-  if (USE_MOCK) return readMockClient("review-create.json");
+  if (USE_MOCK) {
+    const newReview = {
+      id: Date.now(),
+      ...payload,
+      user_id: 1,
+      created_at: new Date().toISOString(),
+    };
+    reviewsMock.unshift(newReview);
+    return { data: newReview };
+  }
 
   const res = await fetch(`${BASE_API_URL}${REVIEW_ENDPOINT}`, {
     method: "POST",
@@ -26,7 +34,11 @@ export async function createReviewService(
 
 /* GET REVIEWS BY PRODUCT */
 export async function getReviewsByProductService(productId: number) {
-  if (USE_MOCK) return readMockClient("review-product.json");
+  if (USE_MOCK) {
+    return {
+      data: reviewsMock.filter((r) => r.product_id === productId),
+    };
+  }
 
   const res = await fetch(
     `${BASE_API_URL}${REVIEW_ENDPOINT}/product/${productId}`
@@ -38,7 +50,11 @@ export async function getReviewsByProductService(productId: number) {
 
 /* GET MY REVIEWS */
 export async function getMyReviewsService(token: string) {
-  if (USE_MOCK) return readMockClient("review-me.json");
+  if (USE_MOCK) {
+    return {
+      data: reviewsMock.filter((r) => r.user_id === 1),
+    };
+  }
 
   const res = await fetch(`${BASE_API_URL}${REVIEW_ENDPOINT}/me`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -54,7 +70,14 @@ export async function updateReviewService(
   payload: { rating?: number; comment?: string },
   token: string
 ) {
-  if (USE_MOCK) return readMockClient("review-update.json");
+  if (USE_MOCK) {
+    const index = reviewsMock.findIndex((r) => r.id === id);
+    if (index !== -1) {
+      reviewsMock[index] = { ...reviewsMock[index], ...payload };
+      return { data: reviewsMock[index] };
+    }
+    throw new Error("Review not found");
+  }
 
   const res = await fetch(`${BASE_API_URL}${REVIEW_ENDPOINT}/${id}`, {
     method: "PUT",
@@ -71,7 +94,14 @@ export async function updateReviewService(
 
 /* DELETE REVIEW */
 export async function deleteReviewService(id: number, token: string) {
-  if (USE_MOCK) return readMockClient("review-delete.json");
+  if (USE_MOCK) {
+    const index = reviewsMock.findIndex((r) => r.id === id);
+    if (index !== -1) {
+      const deleted = reviewsMock.splice(index, 1)[0];
+      return { data: deleted };
+    }
+    throw new Error("Review not found");
+  }
 
   const res = await fetch(`${BASE_API_URL}${REVIEW_ENDPOINT}/${id}`, {
     method: "DELETE",
