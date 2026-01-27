@@ -56,7 +56,7 @@ export const getProductDetail = async (slug: string) => {
  */
 export async function getNewArrivals(): Promise<Product[]> {
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Product[] }>("new-arrivals.json");
+    const mock = await readMock<{ data: Product[] }>("products.json");
     return (mock.data ?? []).filter(Boolean);
   }
 
@@ -75,7 +75,7 @@ export async function getNewArrivals(): Promise<Product[]> {
  */
 export async function getBestSellers(): Promise<Product[]> {
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Product[] }>("best-sellers.json");
+    const mock = await readMock<{ data: Product[] }>("products.json");
     return (mock.data ?? []).filter(Boolean);
   }
 
