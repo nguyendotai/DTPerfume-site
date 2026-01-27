@@ -122,3 +122,37 @@ export async function getProductsByCategorySlug(
     ? json.data.filter(Boolean)
     : [];
 }
+
+/**
+ * Search products by keyword
+ */
+export async function searchProducts(
+  keyword: string,
+  limit = 6,
+  page = 1,
+): Promise<Product[]> {
+  if (!keyword.trim()) return [];
+
+  if (USE_MOCK) {
+    const mock = await readMock<{ data: Product[] }>("products.json");
+    return (mock.data ?? [])
+      .filter((p) =>
+        p?.name?.toLowerCase().includes(keyword.toLowerCase()),
+      )
+      .slice(0, limit);
+  }
+
+  const url = new URL(`${BASE_API_URL}${PRODUCT_ENDPOINT}/search`);
+  url.searchParams.append("keyword", keyword);
+  url.searchParams.append("limit", limit.toString());
+  url.searchParams.append("page", page.toString());
+
+  const res = await fetch(url.toString(), {
+    cache: "no-store",
+  });
+
+  if (!res.ok) throw new Error("Search products failed");
+
+  const json = await res.json();
+  return Array.isArray(json.data) ? json.data : [];
+}

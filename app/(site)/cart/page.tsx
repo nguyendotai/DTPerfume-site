@@ -301,7 +301,7 @@ export default function CartPage() {
               Hãy thêm vài sản phẩm yêu thích vào giỏ ngay nào!
             </p>
             <Link
-              href="/products"
+              href="/"
               className="inline-flex items-center gap-2 px-8 py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 transition-colors"
             >
               Bắt đầu mua sắm
