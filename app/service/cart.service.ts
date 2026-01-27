@@ -1,5 +1,6 @@
 import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
-import { readMock } from "../lib/mock";
+import { readMockServer } from "../lib/mock.server";
+import { readMockClient } from "../lib/mock.client";
 
 const CART_ENDPOINT = "/carts";
 
@@ -16,7 +17,7 @@ async function handleError(res: Response) {
 
 /* GET CART */
 export async function getCartService(token: string) {
-  if (USE_MOCK) return readMock("cart.json");
+  if (USE_MOCK) return readMockClient("cart.json");
 
   const res = await fetch(`${BASE_API_URL}${CART_ENDPOINT}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -31,7 +32,7 @@ export async function addToCartService(
   payload: { variant_id: number; quantity: number },
   token: string
 ) {
-  if (USE_MOCK) return readMock("cart-add.json");
+  if (USE_MOCK) return readMockClient("cart-add.json");
 
   const res = await fetch(`${BASE_API_URL}${CART_ENDPOINT}/add`, {
     method: "POST",
@@ -52,7 +53,7 @@ export async function updateCartItemService(
   quantity: number,
   token: string
 ) {
-  if (USE_MOCK) return readMock("cart-update.json");
+  if (USE_MOCK) return readMockClient("cart-update.json");
 
   const res = await fetch(
     `${BASE_API_URL}${CART_ENDPOINT}/item/${item_id}`,
@@ -72,7 +73,7 @@ export async function updateCartItemService(
 
 /* REMOVE */
 export async function removeCartItemService(item_id: number, token: string) {
-  if (USE_MOCK) return readMock("cart-remove.json");
+  if (USE_MOCK) return readMockClient("cart-remove.json");
 
   const res = await fetch(
     `${BASE_API_URL}${CART_ENDPOINT}/item/${item_id}`,
@@ -88,7 +89,7 @@ export async function removeCartItemService(item_id: number, token: string) {
 
 /* CLEAR */
 export async function clearCartService(token: string) {
-  if (USE_MOCK) return readMock("cart-clear.json");
+  if (USE_MOCK) return readMockClient("cart-clear.json");
 
   const res = await fetch(`${BASE_API_URL}${CART_ENDPOINT}/clear`, {
     method: "DELETE",
@@ -104,7 +105,7 @@ export async function syncCartService(
   items: { variant_id: number; quantity: number }[],
   token: string
 ) {
-  if (USE_MOCK) return readMock("cart-sync.json");
+  if (USE_MOCK) return readMockClient("cart-sync.json");
 
   const res = await fetch(`${BASE_API_URL}${CART_ENDPOINT}/sync`, {
     method: "POST",

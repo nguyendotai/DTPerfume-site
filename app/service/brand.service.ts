@@ -1,5 +1,6 @@
 import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
-import { readMock } from "../lib/mock";
+import { readMockServer } from "../lib/mock.server";
+import { readMockClient } from "../lib/mock.client";
 import { Brand } from "../types/brand";
 
 const BRAND_ENDPOINT = "/brands";
@@ -9,7 +10,7 @@ const BRAND_ENDPOINT = "/brands";
  */
 export async function getHomeBrands(limit?: number): Promise<Brand[]> {
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Brand[] }>("brands.json");
+    const mock = await readMockClient<{ data: Brand[] }>("brands.json");
     const brands = (mock.data ?? []).filter(Boolean);
     return limit ? brands.slice(0, limit) : brands;
   }
@@ -37,7 +38,7 @@ export async function getHomeBrands(limit?: number): Promise<Brand[]> {
  */
 export async function getBrandDetail(slug: string): Promise<Brand> {
   if (USE_MOCK) {
-    return readMock<Brand>("brand-detail.json");
+    return readMockClient<Brand>("brand-detail.json");
   }
 
   const res = await fetch(`${BASE_API_URL}${BRAND_ENDPOINT}/${slug}`, {

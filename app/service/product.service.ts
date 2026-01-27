@@ -1,5 +1,6 @@
 import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
-import { readMock } from "../lib/mock";
+import { readMockServer } from "../lib/mock.server";
+import { readMockClient } from "../lib/mock.client";
 import { Product } from "../types/product";
 
 const PRODUCT_ENDPOINT = "/products";
@@ -9,7 +10,7 @@ const PRODUCT_ENDPOINT = "/products";
  */
 export async function getHomeProducts(): Promise<Product[]> {
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Product[] }>("products.json");
+    const mock = await readMockClient<{ data: Product[] }>("products.json");
     return (mock.data ?? []).filter(Boolean);
   }
 
@@ -56,7 +57,7 @@ export const getProductDetail = async (slug: string) => {
  */
 export async function getNewArrivals(): Promise<Product[]> {
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Product[] }>("products.json");
+    const mock = await readMockClient<{ data: Product[] }>("products.json");
     return (mock.data ?? []).filter(Boolean);
   }
 
@@ -75,7 +76,7 @@ export async function getNewArrivals(): Promise<Product[]> {
  */
 export async function getBestSellers(): Promise<Product[]> {
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Product[] }>("products.json");
+    const mock = await readMockClient<{ data: Product[] }>("products.json");
     return (mock.data ?? []).filter(Boolean);
   }
 
@@ -97,7 +98,7 @@ export async function getProductsByCategorySlug(
   limit = 10
 ): Promise<Product[]> {
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Product[] }>("products.json");
+    const mock = await readMockClient<{ data: Product[] }>("products.json");
     return (mock.data ?? []).filter(
       (p) => p?.category?.slug === slug
     ).slice(0, limit);
@@ -134,7 +135,7 @@ export async function searchProducts(
   if (!keyword.trim()) return [];
 
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Product[] }>("products.json");
+    const mock = await readMockClient<{ data: Product[] }>("products.json");
     return (mock.data ?? [])
       .filter((p) =>
         p?.name?.toLowerCase().includes(keyword.toLowerCase()),

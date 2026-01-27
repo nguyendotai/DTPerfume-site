@@ -1,5 +1,6 @@
 import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
-import { readMock } from "../lib/mock";
+import { readMockServer } from "../lib/mock.server";
+import { readMockClient } from "../lib/mock.client";
 import { Order } from "../types/order";
 
 /**
@@ -7,7 +8,7 @@ import { Order } from "../types/order";
  */
 export async function getUserOrders(userId: number): Promise<Order[]> {
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Order[] }>("orders.json");
+    const mock = await readMockClient<{ data: Order[] }>("orders.json");
     return mock.data ?? [];
   }
 
@@ -27,7 +28,7 @@ export async function getUserOrders(userId: number): Promise<Order[]> {
  */
 export async function getOrderDetail(orderId: number): Promise<Order | null> {
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Order }>("order-detail.json");
+    const mock = await readMockClient<{ data: Order }>("order-detail.json");
     return mock.data ?? null;
   }
 

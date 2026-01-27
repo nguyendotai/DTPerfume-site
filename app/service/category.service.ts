@@ -1,5 +1,6 @@
 import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
-import { readMock } from "../lib/mock";
+import { readMockServer } from "../lib/mock.server";
+import { readMockClient } from "../lib/mock.client";
 import { Category } from "../types/category";
 
 const CATEGORY_ENDPOINT = "/categories";
@@ -7,7 +8,7 @@ const CATEGORY_ENDPOINT = "/categories";
 export async function getHomeCategories(limit?: number): Promise<Category[]> {
   // 🧪 MOCK
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Category[] }>("categories.json");
+    const mock = await readMockClient<{ data: Category[] }>("categories.json");
     const categories = (mock.data ?? []).filter((c) => c?.isMain === true);
 
     return limit ? categories.slice(0, limit) : categories;
@@ -36,7 +37,7 @@ export async function getHomeCategories(limit?: number): Promise<Category[]> {
 
 export async function getNonMainCategories(): Promise<Category[]> {
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Category[] }>("categories.json");
+    const mock = await readMockClient<{ data: Category[] }>("categories.json");
     return (mock.data ?? []).filter(
       (c) => c?.isMain === false
     );
@@ -62,7 +63,7 @@ export async function getCategoryBySlug(
 ): Promise<Category | null> {
   // 🧪 MOCK
   if (USE_MOCK) {
-    const mock = await readMock<{ data: Category[] }>("categories.json");
+    const mock = await readMockClient<{ data: Category[] }>("categories.json");
     return (
       (mock.data ?? []).find((c) => c.slug === slug) ?? null
     );

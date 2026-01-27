@@ -1,5 +1,5 @@
 import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
-import { readMock } from "../lib/mock";
+import { readMockClient } from "../lib/mock.client";
 import {
   LoginPayload,
   RegisterPayload,
@@ -11,7 +11,7 @@ const AUTH_ENDPOINT = "/auth";
 /* LOGIN */
 export async function loginService(payload: LoginPayload) {
   if (USE_MOCK) {
-    return readMock("auth-login.json");
+    return readMockClient("auth-login.json");
   }
 
   const res = await fetch(`${BASE_API_URL}${AUTH_ENDPOINT}/login`, {
@@ -27,7 +27,7 @@ export async function loginService(payload: LoginPayload) {
 /* REGISTER */
 export async function registerService(payload: RegisterPayload) {
   if (USE_MOCK) {
-    return readMock("auth-register.json");
+    return readMockClient("auth-register.json");
   }
 
   const res = await fetch(`${BASE_API_URL}${AUTH_ENDPOINT}/register`, {
@@ -43,7 +43,7 @@ export async function registerService(payload: RegisterPayload) {
 /* GET ME */
 export async function getMeService(token: string) {
   if (USE_MOCK) {
-    return readMock("auth-me.json");
+    return readMockClient("auth-me.json");
   }
 
   const res = await fetch(`${BASE_API_URL}${AUTH_ENDPOINT}/me`, {
@@ -60,7 +60,7 @@ export async function updateProfileService(
   token: string
 ) {
   if (USE_MOCK) {
-    return readMock("auth-update.json");
+    return readMockClient("auth-update.json");
   }
 
   const res = await fetch(`${BASE_API_URL}${AUTH_ENDPOINT}/update`, {

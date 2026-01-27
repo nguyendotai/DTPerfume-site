@@ -1,5 +1,6 @@
 import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
-import { readMock } from "../lib/mock";
+import { readMockServer } from "../lib/mock.server";
+import { readMockClient } from "../lib/mock.client";
 
 const FAVORITE_ENDPOINT = "/favorites";
 
@@ -16,7 +17,7 @@ async function handleError(res: Response) {
 
 /* GET FAVORITE */
 export async function getFavoriteService(token: string) {
-  if (USE_MOCK) return readMock("favorite.json");
+  if (USE_MOCK) return readMockClient("favorite.json");
 
   const res = await fetch(`${BASE_API_URL}${FAVORITE_ENDPOINT}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -31,7 +32,7 @@ export async function addToFavoriteService(
   payload: { variant_id: number;},
   token: string
 ) {
-  if (USE_MOCK) return readMock("favorite-add.json");
+  if (USE_MOCK) return readMockClient("favorite-add.json");
 
   const res = await fetch(`${BASE_API_URL}${FAVORITE_ENDPOINT}/add`, {
     method: "POST",
@@ -51,7 +52,7 @@ export async function removeFavoriteItemService(
   item_id: number,
   token: string
 ) {
-  if (USE_MOCK) return readMock("favorite-remove.json");
+  if (USE_MOCK) return readMockClient("favorite-remove.json");
 
   const res = await fetch(
     `${BASE_API_URL}${FAVORITE_ENDPOINT}/item/${item_id}`,
@@ -67,7 +68,7 @@ export async function removeFavoriteItemService(
 
 /* CLEAR */
 export async function clearFavoriteService(token: string) {
-  if (USE_MOCK) return readMock("favorite-clear.json");
+  if (USE_MOCK) return readMockClient("favorite-clear.json");
 
   const res = await fetch(`${BASE_API_URL}${FAVORITE_ENDPOINT}/clear`, {
     method: "DELETE",
@@ -83,7 +84,7 @@ export async function syncFavoriteService(
   items: { variant_id: number; }[],
   token: string
 ) {
-  if (USE_MOCK) return readMock("favorite-sync.json");
+  if (USE_MOCK) return readMockClient("favorite-sync.json");
 
   const res = await fetch(`${BASE_API_URL}${FAVORITE_ENDPOINT}/sync`, {
     method: "POST",
