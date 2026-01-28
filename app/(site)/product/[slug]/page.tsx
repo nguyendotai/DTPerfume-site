@@ -7,8 +7,8 @@ interface PageProps {
 }
 
 export default async function ProductDetailPage({ params }: PageProps) {
-  const { slug } = await params; // 👈 BẮT BUỘC await
-  const product: Product = await getProductDetail(slug);
+  const { slug } = await params;
+  const product = await getProductDetail(slug); // Product | null
 
   if (!product) {
     return (
