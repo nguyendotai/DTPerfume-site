@@ -1,61 +1,58 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-const heroImages = [
-  {
-    image:
-      "https://thumbs.dreamstime.com/b/elegant-black-perfume-bottle-display-luxurious-design-elegant-black-perfume-bottle-display-luxurious-design-studio-setting-close-370609572.jpg",
-    title: "VALENTINO",
-    cta: "/products",
-  },
-  {
-    image:
-      "https://thumbs.dreamstime.com/b/luxury-perfume-bottle-stone-platform-crystal-glass-golden-details-dramatic-studio-lighting-fragrance-product-388624307.jpg",
-    title: "DIOR",
-    cta: "/products",
-  },
-  {
-    image:
-      "https://thumbs.dreamstime.com/b/luxury-perfume-bottle-gold-glowing-background-standing-sparkling-surface-bokeh-fragrance-concept-beauty-marketing-419848177.jpg",
-    title: "CHANEL",
-    cta: "/products",
-  },
-];
+import { getHomeBrands } from "@/app/service/brand.service";
+import { Brand } from "@/app/types/brand";
 
 export default function HeroSection() {
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    getHomeBrands()
+      .then((data) => setBrands(data))
+      .catch((err) => console.error("Fetch brands failed:", err));
   }, []);
 
+  useEffect(() => {
+    if (!brands.length) return;
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % brands.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [brands]);
+
+  if (!brands.length) return null;
+
   return (
-    <section className="relative w-full h-[520px] overflow-hidden">
+    <section className="relative w-full h-[600px] overflow-hidden">
       {/* Slides */}
-      {heroImages.map((item, i) => (
+      {brands.map((brand, i) => (
         <div
-          key={i}
+          key={brand.id}
           className={`absolute inset-0 transition-opacity duration-1000 ${
             i === index ? "opacity-100" : "opacity-0"
           }`}
           style={{
-            backgroundImage: `url(${item.image})`,
+            backgroundImage: `url(${brand.banner})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         >
-          {/* overlay nhẹ */}
-          <div className="absolute inset-0 bg-black/30" />
+          {/* overlay */}
+          <div className="absolute inset-0" />
+
+          {/* Content */}
+          <div className="relative z-10 flex h-full items-center justify-center">
+            <div className="text-center text-white">
+            </div>
+          </div>
         </div>
       ))}
 
       {/* Dots */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
-        {heroImages.map((_, i) => (
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+        {brands.map((_, i) => (
           <button
             key={i}
             onClick={() => setIndex(i)}
