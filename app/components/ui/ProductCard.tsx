@@ -148,6 +148,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
     // 🔥 ĐÃ LOGIN → API
     if (isFavorited && favoriteItem && "id" in favoriteItem) {
+      // ❌ Xóa
       dispatch(removeFavoriteItemThunk(favoriteItem.id))
         .unwrap()
         .then(() => {
@@ -155,6 +156,15 @@ export default function ProductCard({ product }: ProductCardProps) {
           dispatch(getFavoriteThunk());
         })
         .catch(() => toast.error("Xóa yêu thích thất bại"));
+    } else {
+      // ✅ Thêm
+      dispatch(addToFavoriteThunk({ variant_id: variantId }))
+        .unwrap()
+        .then(() => {
+          toast.success("Đã thêm vào yêu thích");
+          dispatch(getFavoriteThunk());
+        })
+        .catch(() => toast.error("Thêm vào yêu thích thất bại"));
     }
   };
 
