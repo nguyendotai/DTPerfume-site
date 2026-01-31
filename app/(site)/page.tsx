@@ -4,9 +4,9 @@ import BestSellersSection from "../components/home/BestSellersSection";
 import NewArrivalsSection from "../components/home/NewArrivalsSection";
 import CategoriesSection from "../components/home/CategoriesSection";
 import CategoryProductsSection from "../components/home/CategoryProductsSection";
-import AboutUs from "../components/home/AboutUs";
-import Policies from "../components/home/Policies";
-import StoreSystem from "../components/home/StoreSystem";
+import AboutUsSection from "../components/home/AboutUs";
+import PoliciesSection from "../components/home/Policies";
+import StoreSystemSection from "../components/home/StoreSystem";
 
 import {
   getNewArrivals,
@@ -46,7 +46,7 @@ export default async function HomePage() {
         category,
         products,
       };
-    })
+    }),
   );
 
   return (
@@ -71,9 +71,9 @@ export default async function HomePage() {
       {/* CATEGORY + PRODUCTS (NON-MAIN) */}
       <CategoryProductsSection items={categoryProducts} />
 
-      <AboutUs />
-      <Policies />
-      <StoreSystem />
+      <AboutUsSection />
+      <PoliciesSection />
+      <StoreSystemSection />
     </div>
   );
 }

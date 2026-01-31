@@ -27,20 +27,21 @@ export const getHomeBrands = async (limit?: number): Promise<Brand[]> => {
 };
 
 /**
- * Brand detail
+ * Brand detail by slug
  */
-export const getBrandDetail = async (slug: string): Promise<Brand> => {
+export const getBrandDetail = async (slug: string): Promise<Brand | null> => {
   if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
-    return brandsMock.find((b) => b.slug === slug)!;
+    return brandsMock.find((b) => b.slug === slug) || null;
   } else {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}${BRAND_ENDPOINT}/${slug}`,
-      {
-        cache: "no-store",
-      }
+      `${process.env.NEXT_PUBLIC_API_URL}/brands/${slug}`,
+      { cache: "no-store" }
     );
 
+    if (res.status === 404) return null;
     if (!res.ok) throw new Error("Fetch brand detail failed");
-    return res.json();
+
+    const data = await res.json();
+    return data?.data ?? null;
   }
 };

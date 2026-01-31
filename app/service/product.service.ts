@@ -12,7 +12,7 @@ export const getHomeProducts = async (): Promise<Product[]> => {
   } else {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}`,
-      { cache: "no-store" }
+      { cache: "no-store" },
     );
 
     if (!res.ok) throw new Error("Fetch home products failed");
@@ -26,14 +26,14 @@ export const getHomeProducts = async (): Promise<Product[]> => {
  * Product detail
  */
 export const getProductDetail = async (
-  slug: string
+  slug: string,
 ): Promise<Product | null> => {
   if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
     return productsMock.find((p) => p.slug === slug) || null;
   } else {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/${slug}`,
-      { cache: "no-store" }
+      { cache: "no-store" },
     );
 
     if (res.status === 404) return null;
@@ -49,12 +49,11 @@ export const getProductDetail = async (
  */
 export const getNewArrivals = async (): Promise<Product[]> => {
   if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
-    return productsMock
-      .filter(Boolean);
+    return productsMock.filter(Boolean);
   } else {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/new-arrivals`,
-      { cache: "no-store" }
+      { cache: "no-store" },
     );
 
     if (!res.ok) throw new Error("Fetch new arrivals failed");
@@ -69,12 +68,11 @@ export const getNewArrivals = async (): Promise<Product[]> => {
  */
 export const getBestSellers = async (): Promise<Product[]> => {
   if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
-    return productsMock
-      .filter(Boolean);
+    return productsMock.filter(Boolean);
   } else {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/bestsellers`,
-      { cache: "no-store" }
+      { cache: "no-store" },
     );
 
     if (!res.ok) throw new Error("Fetch best sellers failed");
@@ -89,7 +87,7 @@ export const getBestSellers = async (): Promise<Product[]> => {
  */
 export const getProductsByCategorySlug = async (
   slug: string,
-  limit = 10
+  limit = 10,
 ): Promise<Product[]> => {
   if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
     return productsMock
@@ -97,7 +95,7 @@ export const getProductsByCategorySlug = async (
       .slice(0, limit);
   } else {
     const url = new URL(
-      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/category/${slug}`
+      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/category/${slug}`,
     );
     url.searchParams.append("limit", limit.toString());
 
@@ -116,19 +114,17 @@ export const getProductsByCategorySlug = async (
 export const searchProducts = async (
   keyword: string,
   limit = 6,
-  page = 1
+  page = 1,
 ): Promise<Product[]> => {
   if (!keyword.trim()) return [];
 
   if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
     return productsMock
-      .filter((p) =>
-        p?.name?.toLowerCase().includes(keyword.toLowerCase())
-      )
+      .filter((p) => p?.name?.toLowerCase().includes(keyword.toLowerCase()))
       .slice(0, limit);
   } else {
     const url = new URL(
-      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/search`
+      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/search`,
     );
     url.searchParams.append("keyword", keyword);
     url.searchParams.append("limit", limit.toString());
@@ -140,5 +136,31 @@ export const searchProducts = async (
 
     const data = await res.json();
     return Array.isArray(data.data) ? data.data : [];
+  }
+};
+
+/**
+ * Products by brand slug
+ */
+export const getProductsByBrandSlug = async (
+  slug: string,
+  limit = 12,
+  page = 1,
+): Promise<Product[]> => {
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return productsMock.filter((p) => p?.brand?.slug === slug).slice(0, limit);
+  } else {
+    const url = new URL(
+      `${process.env.NEXT_PUBLIC_API_URL}${PRODUCT_ENDPOINT}/brand/${slug}`,
+    );
+    url.searchParams.append("limit", limit.toString());
+    url.searchParams.append("page", page.toString());
+
+    const res = await fetch(url.toString(), { cache: "no-store" });
+
+    if (!res.ok) throw new Error("Fetch products by brand failed");
+
+    const data = await res.json();
+    return Array.isArray(data.data) ? data.data.filter(Boolean) : [];
   }
 };
