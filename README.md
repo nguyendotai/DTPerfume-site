@@ -98,25 +98,26 @@ app.ts
 
 ## ⚙️ Cài đặt & chạy dự án
 
-### 1. Clone dự án
+### 1. Clone và cài đặt dự án(Backend)
 
 ```bash
-git clone https://github.com/nguyendotai/DTPerfume-site.git
-cd dtperfume
-```
-
-### 2. Cài đặt backend
-
-```bash
-cd backend
+git clone https://github.com/nguyendotai/DTPerfume-backend.git
 npm install
 npm run dev
 ```
 
-### 3. Cài đặt frontend
+### 2. Clone và cài đặt dự án(Frontend)
 
 ```bash
-cd frontend
+git clone https://github.com/nguyendotai/DTPerfume-site.git
+npm install
+npm run dev
+```
+
+### 3. Clone và cài đặt dự án(Admin)
+
+```bash
+git clone https://github.com/nguyendotai/DTPerfume-admni.git
 npm install
 npm run dev
 ```
@@ -126,14 +127,23 @@ npm run dev
 Backend:
 
 ```
-PORT=5000
-DB_NAME=dtperfume
-DB_USER=root
-DB_PASSWORD=yourpassword
+PORT=4000
+DB_NAME=dtperfume     
+DB_USER=root             
+DB_PASSWORD=            
 DB_HOST=localhost
-JWT_SECRET=your_secret
-EMAIL_USER=your_email
-EMAIL_PASS=your_email_password
+
+JWT_SECRET=supersecret
+
+STRIPE_SECRET_KEY=sk_test_51SGfBD2Lfs8gA1ECrUc9EaW7nLpHmZdH9ReOItXE9JIFD97sh7aaOLTH2biph7LTlhfKPI7oh98RdMhAJ30uoGKz00KnriG3Uu
+STRIPE_PUBLISHABLE_KEY=pk_test_51SGfBD2Lfs8gA1ECbc0ikICRWhbANoiwVMlbdMyVDAUBDwH4ObgNDMx74l5fw2ZYs4awZ4ScnN5zLy3ABnTqOtCT00D1OxTVrd
+STRIPE_WEBHOOK_SECRET=whsec_9b58797a1cefb5d6d820db0f175580f9a7db28bf74f66b4209d7afb49a18126c
+
+OPENAI_API_KEY=ssk-proj-8AP1PhZ_3KLmn7suT0fmnlquUB5ChHjclzCV74qhwDUXaeuIzaOQ5M-eR3EQM06XeaPAIBLtrzT3BlbkFJpjPixDbc4Qt3mXTnFZspriPf9SKHA4GIGWcEHPT0GsbjC3e6NZ16E6TBqjT_kXV0ytGk2wJ-oA
+
+CLOUDINARY_CLOUD_NAME=dovmfzcnk
+CLOUDINARY_API_KEY=347133623652791
+CLOUDINARY_API_SECRET=tOHJ-yyb-7P0cVGjzK-yuYOuvqk
 ```
 
 Frontend:
@@ -158,7 +168,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 
 ## 📸 Demo & Link dự án
 
-* Website: *(điền link deploy nếu có)*
+* Website: https://dt-perfume-site-iidtbl0vn-nguyendotais-projects.vercel.app
 * Admin panel: *(điền link nếu có)*
 * GitHub repo: *(điền link nếu có)*
 
