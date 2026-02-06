@@ -101,7 +101,7 @@ app.ts
 ### 1. Clone dự án
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/nguyendotai/DTPerfume-site.git
 cd dtperfume
 ```
 
