@@ -31,6 +31,7 @@ DTPerfume là một dự án website thương mại điện tử chuyên bán n�
 * Quản lý sản phẩm (thêm, sửa, xoá)
 * Upload ảnh sản phẩm (ảnh chính, ảnh phụ, ảnh biến thể)
 * Quản lý danh mục
+* Quản lí thương hiệu
 * Quản lý người dùng
 * Quản lý đơn hàng
 
@@ -38,7 +39,7 @@ DTPerfume là một dự án website thương mại điện tử chuyên bán n�
 
 ## 🧑‍💻 Công nghệ sử dụng
 
-### Frontend
+### Frontend (site)
 
 * **Next.js (React)**
 * **TypeScript / TSX**
@@ -57,6 +58,13 @@ DTPerfume là một dự án website thương mại điện tử chuyên bán n�
 * **Multer** (upload ảnh)
 * **JWT** (xác thực)
 
+### Frontend (admin)
+
+* **Next.js (React)**
+* **TypeScript / TSX**
+* **Framer Motion** (hiệu ứng UI)
+* **Tailwind CSS** / CSS Modules
+* **Fetch API** (gọi backend)
 ### Khác
 
 * **Git & GitHub** (quản lý mã nguồn)
@@ -64,7 +72,7 @@ DTPerfume là một dự án website thương mại điện tử chuyên bán n�
 
 ---
 
-## 📁 Cấu trúc dự án (tóm tắt)
+## 📁 Cấu trúc dự án
 
 ### Site (Next.js)
 
@@ -385,7 +393,8 @@ CLOUDINARY_API_SECRET=tOHJ-yyb-7P0cVGjzK-yuYOuvqk
 Frontend:
 
 ```
-NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_API_URL=http://localhost:4000
+NEXT_PUBLIC_USE_MOCK=false
 ```
 
 ---
@@ -413,9 +422,9 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 ## 👤 Tác giả
 
 **Tai Nguyen**
-Frontend Developer (Intern/Junior)
+Frontend Developer (Intern)
 
-* GitHub: *(link github)*
+* GitHub: [*(link github)*](https://github.com/nguyendotai)
 * Portfolio: *(link portfolio)*
 
 ---
