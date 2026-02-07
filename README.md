@@ -361,7 +361,7 @@ npm run dev
 ### 3. Clone và cài đặt dự án(Admin)
 
 ```bash
-git clone https://github.com/nguyendotai/DTPerfume-admni.git
+git clone https://github.com/nguyendotai/DTPerfume-admin.git
 npm install
 npm run dev
 ```
@@ -393,7 +393,7 @@ CLOUDINARY_API_SECRET=tOHJ-yyb-7P0cVGjzK-yuYOuvqk
 Frontend:
 
 ```
-NEXT_PUBLIC_API_URL=http://localhost:4000
+NEXT_PUBLIC_API_URL=http://localhost:4000/api
 NEXT_PUBLIC_USE_MOCK=false
 ```
 
@@ -414,8 +414,7 @@ NEXT_PUBLIC_USE_MOCK=false
 ## 📸 Demo & Link dự án
 
 * Website: https://dt-perfume-site-iidtbl0vn-nguyendotais-projects.vercel.app
-* Admin panel: *(điền link nếu có)*
-* GitHub repo: *(điền link nếu có)*
+* GitHub repo: https://github.com/nguyendotai/DTPerfume-site
 
 ---
 
