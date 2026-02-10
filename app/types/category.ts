@@ -2,8 +2,10 @@ export interface Category {
   id: number;
   name: string;
   slug: string;
+  description?: string;
   image: string;
-  description: string;
-  isActive?: boolean;
-  isMain?: boolean;
+  isActive: boolean;
+  isMain: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }

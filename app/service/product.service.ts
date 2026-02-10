@@ -91,7 +91,7 @@ export const getProductsByCategorySlug = async (
 ): Promise<Product[]> => {
   if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
     return productsMock
-      .filter((p) => p?.category?.slug === slug)
+      .filter((p) => p.categories?.some((c) => c.slug === slug))
       .slice(0, limit);
   } else {
     const url = new URL(
@@ -107,6 +107,7 @@ export const getProductsByCategorySlug = async (
     return Array.isArray(data.data) ? data.data.filter(Boolean) : [];
   }
 };
+
 
 /**
  * Search products by keyword

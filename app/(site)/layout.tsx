@@ -1,6 +1,7 @@
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import TopBar from "../components/layout/TopBar";
+import ChatBox from "../components/chat/chatBox";
 
 export default function SiteLayout({
   children,

@@ -1,4 +1,3 @@
-// FilterSidebar.tsx
 "use client";
 
 import { useState } from "react";
@@ -12,7 +11,19 @@ const priceRanges = [
   "Trên 5 triệu",
 ];
 
-export default function FilterSidebar() {
+interface Props {
+  selectedBrands: string[];
+  selectedPrices: string[];
+  onBrandChange: (brands: string[]) => void;
+  onPriceChange: (prices: string[]) => void;
+}
+
+export default function FilterSidebar({
+  selectedBrands,
+  selectedPrices,
+  onBrandChange,
+  onPriceChange,
+}: Props) {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
     brand: true,
     price: true,
@@ -20,6 +31,22 @@ export default function FilterSidebar() {
 
   const toggleSection = (section: string) => {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
+  };
+
+  const toggleBrand = (brand: string) => {
+    if (selectedBrands.includes(brand)) {
+      onBrandChange(selectedBrands.filter((b) => b !== brand));
+    } else {
+      onBrandChange([...selectedBrands, brand]);
+    }
+  };
+
+  const togglePrice = (price: string) => {
+    if (selectedPrices.includes(price)) {
+      onPriceChange(selectedPrices.filter((p) => p !== price));
+    } else {
+      onPriceChange([...selectedPrices, price]);
+    }
   };
 
   return (
@@ -49,9 +76,13 @@ export default function FilterSidebar() {
               >
                 <input
                   type="checkbox"
+                  checked={selectedBrands.includes(brand)}
+                  onChange={() => toggleBrand(brand)}
                   className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black accent-black"
                 />
-                <span className="group-hover:underline decoration-1 underline-offset-4">{brand}</span>
+                <span className="group-hover:underline decoration-1 underline-offset-4">
+                  {brand}
+                </span>
               </label>
             ))}
           </div>
@@ -79,19 +110,18 @@ export default function FilterSidebar() {
               >
                 <input
                   type="checkbox"
+                  checked={selectedPrices.includes(range)}
+                  onChange={() => togglePrice(range)}
                   className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black accent-black"
                 />
-                <span className="group-hover:underline decoration-1 underline-offset-4">{range}</span>
+                <span className="group-hover:underline decoration-1 underline-offset-4">
+                  {range}
+                </span>
               </label>
             ))}
           </div>
         )}
       </div>
-
-      {/* Có thể thêm sau: Nút Xóa bộ lọc */}
-      {/* <button className="mt-6 text-sm text-gray-500 hover:text-black underline">
-        Xóa tất cả bộ lọc
-      </button> */}
     </div>
   );
 }

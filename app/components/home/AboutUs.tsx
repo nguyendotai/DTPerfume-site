@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function AboutUsSection() {
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Về Chúng Tôi</h2>
@@ -17,9 +17,9 @@ export default function AboutUsSection() {
             <Image
               src="/images/about-image.jpg" // Thay bằng ảnh thật của bạn (đội ngũ, cửa hàng, sản phẩm...)
               alt="Về chúng tôi"
-              width={600}
-              height={500}
-              className="rounded-xl shadow-lg object-cover w-full h-auto"
+              width={400}
+              height={300}
+              className="rounded-xl shadow-lg object-cover w-full max-h-[500px]"
             />
           </div>
 

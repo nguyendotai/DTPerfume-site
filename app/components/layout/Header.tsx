@@ -13,7 +13,6 @@ import { searchProducts } from "@/app/service/product.service";
 import { Product } from "@/app/types/product";
 
 const CATEGORY_MENU = [
-  { label: "Namperfume Favorites", slug: "favorites" },
   { label: "Deal Thơm", slug: "deal-thom" },
   { label: "Nước Hoa Nam", slug: "nuoc-hoa-nam" },
   { label: "Nước Hoa Nữ", slug: "nuoc-hoa-nu" },

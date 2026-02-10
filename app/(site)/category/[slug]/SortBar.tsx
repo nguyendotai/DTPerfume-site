@@ -1,11 +1,17 @@
-// SortBar.tsx
 "use client";
 
-export default function SortBar() {
+interface Props {
+  sort: string;
+  onSortChange: (value: string) => void;
+}
+
+export default function SortBar({ sort, onSortChange }: Props) {
   return (
     <div className="flex items-center gap-3 text-sm">
       <span className="text-gray-600 font-medium">Sắp xếp theo:</span>
       <select
+        value={sort}
+        onChange={(e) => onSortChange(e.target.value)}
         className={`
           bg-white border border-gray-200 
           px-4 py-2 rounded-lg text-gray-700
@@ -15,7 +21,6 @@ export default function SortBar() {
           bg-[url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>')] 
           bg-no-repeat bg-[right_0.75rem_center]
         `}
-        defaultValue="best-selling"
       >
         <option value="best-selling">Bán chạy nhất</option>
         <option value="price-asc">Giá thấp → cao</option>

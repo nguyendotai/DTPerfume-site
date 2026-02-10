@@ -21,8 +21,10 @@ import {
 } from "../service/category.service";
 import { CategoryWithProducts } from "../components/home/CategoryProductsSection";
 
+// Import wrapper (client component)
+import MotionSection from "../components/motion/MotionSection"; // điều chỉnh path cho đúng
+
 export default async function HomePage() {
-  // 🔥 API server
   const [
     bestSellerProducts,
     brands,
@@ -33,47 +35,60 @@ export default async function HomePage() {
     getBestSellers(),
     getHomeBrands(16),
     getNewArrivals(),
-    getHomeCategories(3), // ✅ MAIN (icon grid)
-    getNonMainCategories(), // ✅ NON-MAIN (product slider)
+    getHomeCategories(3),
+    getNonMainCategories(),
   ]);
 
-  // 🔥 Lấy product theo từng category
   const categoryProducts: CategoryWithProducts[] = await Promise.all(
     nonMainCategories.map(async (category) => {
       const products = await getProductsByCategorySlug(category.slug, 10);
-
-      return {
-        category,
-        products,
-      };
-    }),
+      return { category, products };
+    })
   );
 
   return (
-    <div>
+    <div className="min-h-screen">
+      {/* Hero thường không cần whileInView vì luôn ở đầu trang */}
       <HeroSection />
 
-      <BrandsSection brands={brands} />
+      {/* Các section còn lại dùng MotionSection */}
+      <MotionSection>
+        <BrandsSection brands={brands} />
+      </MotionSection>
 
-      <section className="py-10 max-w-7xl mx-auto px-4">
-        <BestSellersSection products={bestSellerProducts} />
-      </section>
+      <MotionSection delay={0.1}>
+        <section className="py-10 max-w-7xl mx-auto px-4">
+          <BestSellersSection products={bestSellerProducts} />
+        </section>
+      </MotionSection>
 
-      <section className="py-10 max-w-7xl mx-auto px-4">
-        <NewArrivalsSection products={newArrivals} />
-      </section>
+      <MotionSection delay={0.15}>
+        <section className="py-10 max-w-7xl mx-auto px-4">
+          <NewArrivalsSection products={newArrivals} />
+        </section>
+      </MotionSection>
 
-      {/* CATEGORY ICON GRID (MAIN) */}
-      <section className="py-10 max-w-7xl mx-auto">
-        <CategoriesSection categories={mainCategories} />
-      </section>
+      <MotionSection delay={0.2}>
+        <section className="py-10 max-w-7xl mx-auto">
+          <CategoriesSection categories={mainCategories} />
+        </section>
+      </MotionSection>
 
-      {/* CATEGORY + PRODUCTS (NON-MAIN) */}
-      <CategoryProductsSection items={categoryProducts} />
+      <MotionSection delay={0.25}>
+        <CategoryProductsSection items={categoryProducts} />
+      </MotionSection>
 
-      <AboutUsSection />
-      <PoliciesSection />
-      <StoreSystemSection />
+      <MotionSection delay={0.3}>
+        <AboutUsSection />
+      </MotionSection>
+
+      <MotionSection delay={0.35}>
+        <PoliciesSection />
+      </MotionSection>
+
+      <MotionSection delay={0.4}>
+        <StoreSystemSection />
+      </MotionSection>
     </div>
   );
 }

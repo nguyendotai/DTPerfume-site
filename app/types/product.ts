@@ -48,7 +48,6 @@ export type ProductConcentration = "EDP" | "EDT" | "Parfum";
 export type ProductGender = "male" | "female" | "unisex";
 
 export interface Product {
-  category: any;
   id: number;
 
   name: string;

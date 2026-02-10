@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import FilterSidebar from "./FilterSidebar";
 import ProductGrid from "./ProductGrid";
 import SortBar from "./SortBar";
@@ -12,6 +13,65 @@ interface Props {
 }
 
 export default function CategoryClient({ category, products }: Props) {
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedPrices, setSelectedPrices] = useState<string[]>([]);
+  const [sort, setSort] = useState<string>("best-selling");
+
+  // 👉 Hàm lấy giá hiển thị của sản phẩm (ưu tiên discount_price)
+  const getProductPrice = (product: Product): number => {
+    if (!product.variants || product.variants.length === 0) return 0;
+
+    const prices = product.variants.map((v) => {
+      const price = v.discount_price || v.price || "0";
+      return Number(price);
+    });
+
+    return Math.min(...prices); // lấy giá thấp nhất trong các variant
+  };
+
+  const filteredAndSortedProducts = useMemo(() => {
+    let result = [...products];
+
+    // 👉 Filter theo brand
+    if (selectedBrands.length > 0) {
+      result = result.filter((p) =>
+        selectedBrands.includes(p.brand?.name || "")
+      );
+    }
+
+    // 👉 Filter theo giá
+    if (selectedPrices.length > 0) {
+      result = result.filter((p) => {
+        const price = getProductPrice(p);
+
+        return selectedPrices.some((range) => {
+          if (range === "Dưới 1 triệu") return price < 1_000_000;
+          if (range === "1 – 2 triệu") return price >= 1_000_000 && price < 2_000_000;
+          if (range === "2 – 3 triệu") return price >= 2_000_000 && price < 3_000_000;
+          if (range === "3 – 5 triệu") return price >= 3_000_000 && price < 5_000_000;
+          if (range === "Trên 5 triệu") return price >= 5_000_000;
+          return false;
+        });
+      });
+    }
+
+    // 👉 Sort
+    if (sort === "price-asc") {
+      result.sort((a, b) => getProductPrice(a) - getProductPrice(b));
+    } else if (sort === "price-desc") {
+      result.sort((a, b) => getProductPrice(b) - getProductPrice(a));
+    } else if (sort === "newest") {
+      result.sort(
+        (a, b) =>
+          new Date(b.createdAt || "").getTime() -
+          new Date(a.createdAt || "").getTime()
+      );
+    }
+    // best-selling: giữ nguyên hoặc sort theo sold nếu có
+
+    return result;
+  }, [products, selectedBrands, selectedPrices, sort]);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
       {/* Header */}
@@ -21,20 +81,25 @@ export default function CategoryClient({ category, products }: Props) {
             {category.name}
           </h1>
           <p className="mt-3 text-sm text-gray-500">
-            {products.length} sản phẩm
+            {filteredAndSortedProducts.length} sản phẩm
           </p>
         </div>
 
-        <SortBar />
+        <SortBar sort={sort} onSortChange={setSort} />
       </div>
 
       <div className="grid grid-cols-12 gap-8">
         <aside className="col-span-12 lg:col-span-3">
-          <FilterSidebar />
+          <FilterSidebar
+            selectedBrands={selectedBrands}
+            selectedPrices={selectedPrices}
+            onBrandChange={setSelectedBrands}
+            onPriceChange={setSelectedPrices}
+          />
         </aside>
 
         <section className="col-span-12 lg:col-span-9">
-          <ProductGrid products={products} />
+          <ProductGrid products={filteredAndSortedProducts} />
         </section>
       </div>
     </div>

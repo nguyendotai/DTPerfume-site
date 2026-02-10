@@ -1,10 +1,11 @@
 export interface Brand {
   id: number;
   name: string;
-  slug?: string;
-  logo?: string;
+  slug: string;
+  logo: string;
   banner: string;
-
-  createdAt?: string;
-  updatedAt?: string;
+  description: string;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

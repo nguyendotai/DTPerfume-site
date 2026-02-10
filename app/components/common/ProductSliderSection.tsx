@@ -26,7 +26,7 @@ export default function ProductSliderSection({
   if (!products || products.length === 0) return null;
 
   return (
-    <>
+    <div className="">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-3xl font-serif">{title}</h2>
@@ -76,6 +76,6 @@ export default function ProductSliderSection({
           <ChevronRight size={28} />
         </button>
       </div>
-    </>
+    </div>
   );
 }
