@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ChevronRight } from 'lucide-react'; // Cần install @heroicons/react nếu chưa có
+import { ChevronRight } from 'lucide-react'; 
 import { Category } from "@/app/types/category";
 
 interface CategoriesSectionProps {

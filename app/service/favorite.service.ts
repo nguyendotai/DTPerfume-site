@@ -1,4 +1,4 @@
-import { favoriteMock } from "../mock/favorite.mock"; // đổi đúng path mock của bạn
+import { favoriteMock } from "../mock/favorite.mock"; 
 
 const FAVORITE_ENDPOINT = "/favorites";
 

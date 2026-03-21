@@ -1,5 +1,5 @@
 import { Product } from "../types/product";
-import { productsMock } from "../mock/productMock"; // bạn đổi đúng path mock
+import { productsMock } from "../mock/productMock"; 
 
 const PRODUCT_ENDPOINT = "/products";
 

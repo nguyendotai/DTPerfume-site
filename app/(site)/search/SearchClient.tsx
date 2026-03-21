@@ -16,7 +16,6 @@ export default function SearchClient({ keyword, products }: Props) {
   const [selectedPrices, setSelectedPrices] = useState<string[]>([]);
   const [sort, setSort] = useState<string>("best-selling");
 
-  // 👉 Lấy giá hiển thị của sản phẩm (ưu tiên discount_price)
   const getProductPrice = (product: Product): number => {
     if (!product.variants || product.variants.length === 0) return 0;
 
@@ -31,14 +30,12 @@ export default function SearchClient({ keyword, products }: Props) {
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...products];
 
-    // 👉 Filter theo brand
     if (selectedBrands.length > 0) {
       result = result.filter((p) =>
         selectedBrands.includes(p.brand?.name || "")
       );
     }
 
-    // 👉 Filter theo giá
     if (selectedPrices.length > 0) {
       result = result.filter((p) => {
         const price = getProductPrice(p);
@@ -54,7 +51,6 @@ export default function SearchClient({ keyword, products }: Props) {
       });
     }
 
-    // 👉 Sort
     if (sort === "price-asc") {
       result.sort((a, b) => getProductPrice(a) - getProductPrice(b));
     } else if (sort === "price-desc") {

@@ -14,12 +14,12 @@ import {
 import { clearLocalFavorite } from "@/app/store/slices/favorite.local.slice";
 
 const authImages = [
-  "https://thumbs.dreamstime.com/b/elegant-glass-perfume-bottle-filled-amber-liquid-glowing-warmly-under-light-surrounded-swirling-smoke-bokeh-lights-403723199.jpg", // smoke golden
+  "https://thumbs.dreamstime.com/b/elegant-glass-perfume-bottle-filled-amber-liquid-glowing-warmly-under-light-surrounded-swirling-smoke-bokeh-lights-403723199.jpg",
   "https://thumbs.dreamstime.com/b/elegant-glass-perfume-bottle-filled-amber-liquid-glowing-warmly-under-light-surrounded-swirling-smoke-bokeh-lights-403723204.jpg",
   "https://thumbs.dreamstime.com/b/elegant-perfume-bottle-faceted-cap-sits-reflective-surface-bottle-filled-dark-amber-liquid-its-398485361.jpg",
   "https://thumbs.dreamstime.com/b/elegant-perfume-bottle-golden-accents-smoke-dark-background-exquisite-design-details-swirling-against-black-perfect-393616658.jpg",
   "https://thumbs.dreamstime.com/b/ornate-perfume-bottle-gold-lid-sits-dark-surface-surrounded-soft-glowing-smoke-few-scattered-petals-321288321.jpg",
-  "https://thumbs.dreamstime.com/b/ultra-realistic-ad-luxury-perfume-bottle-intricate-design-soft-lighting-floral-accents-376445995.jpg", // with roses
+  "https://thumbs.dreamstime.com/b/ultra-realistic-ad-luxury-perfume-bottle-intricate-design-soft-lighting-floral-accents-376445995.jpg",
   "https://thumbs.dreamstime.com/b/luxury-perfume-bottles-gold-marble-veins-modern-design-two-elegant-perfume-bottles-black-transparent-glass-395030756.jpg",
   "https://thumbs.dreamstime.com/b/bottle-perfume-rose-design-marble-surface-surrounded-pearls-roses-ai-generated-bottle-perfume-sitting-404826752.jpg",
 ];

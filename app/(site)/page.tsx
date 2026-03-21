@@ -48,10 +48,8 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero thường không cần whileInView vì luôn ở đầu trang */}
       <HeroSection />
 
-      {/* Các section còn lại dùng MotionSection */}
       <MotionSection>
         <BrandsSection brands={brands} />
       </MotionSection>

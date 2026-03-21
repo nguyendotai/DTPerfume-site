@@ -1,12 +1,12 @@
-import { BASE_API_URL, USE_MOCK } from "../lib/api.config";
-import { reviewsMock } from "../mock/reviews.mock"; // đổi đúng path mock của bạn
+import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
+import { reviewsMock } from "../mock/reviews.mock";
 
 const REVIEW_ENDPOINT = "/reviews";
 
 /* CREATE REVIEW */
 export async function createReviewService(
   payload: { product_id: number; rating: number; comment: string },
-  token: string
+  token: string,
 ) {
   if (USE_MOCK) {
     const newReview = {
@@ -41,7 +41,7 @@ export async function getReviewsByProductService(productId: number) {
   }
 
   const res = await fetch(
-    `${BASE_API_URL}${REVIEW_ENDPOINT}/product/${productId}`
+    `${BASE_API_URL}${REVIEW_ENDPOINT}/product/${productId}`,
   );
 
   if (!res.ok) throw new Error((await res.json()).message);
@@ -68,7 +68,7 @@ export async function getMyReviewsService(token: string) {
 export async function updateReviewService(
   id: number,
   payload: { rating?: number; comment?: string },
-  token: string
+  token: string,
 ) {
   if (USE_MOCK) {
     const index = reviewsMock.findIndex((r) => r.id === id);

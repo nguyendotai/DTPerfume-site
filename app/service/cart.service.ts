@@ -1,4 +1,4 @@
-import { cartMock } from "../mock/cart.mock"; // đổi đúng path mock của bạn
+import { cartMock } from "../mock/cart.mock";
 
 const CART_ENDPOINT = "/carts";
 

@@ -17,7 +17,6 @@ export default function CategoryClient({ category, products }: Props) {
   const [selectedPrices, setSelectedPrices] = useState<string[]>([]);
   const [sort, setSort] = useState<string>("best-selling");
 
-  // 👉 Hàm lấy giá hiển thị của sản phẩm (ưu tiên discount_price)
   const getProductPrice = (product: Product): number => {
     if (!product.variants || product.variants.length === 0) return 0;
 
@@ -26,20 +25,18 @@ export default function CategoryClient({ category, products }: Props) {
       return Number(price);
     });
 
-    return Math.min(...prices); // lấy giá thấp nhất trong các variant
+    return Math.min(...prices);
   };
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...products];
 
-    // 👉 Filter theo brand
     if (selectedBrands.length > 0) {
       result = result.filter((p) =>
         selectedBrands.includes(p.brand?.name || "")
       );
     }
 
-    // 👉 Filter theo giá
     if (selectedPrices.length > 0) {
       result = result.filter((p) => {
         const price = getProductPrice(p);
@@ -67,7 +64,6 @@ export default function CategoryClient({ category, products }: Props) {
           new Date(a.createdAt || "").getTime()
       );
     }
-    // best-selling: giữ nguyên hoặc sort theo sold nếu có
 
     return result;
   }, [products, selectedBrands, selectedPrices, sort]);

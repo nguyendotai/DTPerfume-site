@@ -1,5 +1,5 @@
 import { Brand } from "../types/brand";
-import { brandsMock } from "../mock/brands.mock"; // đổi đúng path mock của bạn
+import { brandsMock } from "../mock/brands.mock"; 
 
 const BRAND_ENDPOINT = "/brands";
 

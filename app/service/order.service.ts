@@ -1,6 +1,6 @@
 import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
 import { Order } from "../types/order";
-import { ordersMock } from "../mock/orders.mock"; // đổi đúng path mock của bạn
+import { ordersMock } from "../mock/orders.mock"; 
 
 /**
  * Lấy danh sách đơn hàng của user

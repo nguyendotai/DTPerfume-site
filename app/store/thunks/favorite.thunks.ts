@@ -34,7 +34,7 @@ export const removeFavoriteItemThunk = createAsyncThunk(
   async (item_id: number, { getState }) => {
     const state: any = getState();
     await removeFavoriteItemService(item_id, state.auth.token);
-    return { item_id }; // 👈 QUAN TRỌNG
+    return { item_id };
   }
 );
 

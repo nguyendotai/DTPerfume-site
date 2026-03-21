@@ -14,7 +14,7 @@ interface Props {
   title: string;
   products: Product[];
   viewMoreHref?: string;
-  sliderId: string; // để tránh trùng navigation
+  sliderId: string;
 }
 
 export default function ProductSliderSection({

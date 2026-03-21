@@ -1,6 +1,6 @@
 import { USE_MOCK, BASE_API_URL } from "../lib/api.config";
 import { Category } from "../types/category";
-import { categoriesMock } from "../mock/categories.mock";// đổi đúng path mock của bạn
+import { categoriesMock } from "../mock/categories.mock";
 
 const CATEGORY_ENDPOINT = "/categories";
 

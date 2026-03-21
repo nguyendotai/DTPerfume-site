@@ -1,11 +1,11 @@
 import { ProductVariant } from "./product";
 
 export interface CartItem {
-  id: number; // cart_item_id
+  id: number;
   variant_id: number;
   quantity: number;
 
-  price: string; // snapshot price
+  price: string;
   discount_price?: string;
 
   variant: ProductVariant;

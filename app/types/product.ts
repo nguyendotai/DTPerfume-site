@@ -12,15 +12,14 @@ export interface ProductVariant {
   sku: string;
   barcode: string;
 
-  price?: string; // DECIMAL -> string
-  discount_price?: string; // DECIMAL -> string
+  price?: string; 
+  discount_price?: string; 
 
   stock: number;
 
   createdAt?: string;
   updatedAt?: string;
 
-  // relations
   product?: Product;
   variantImages?: ProductImage[];
 }
@@ -39,7 +38,6 @@ export interface ProductImage {
   createdAt?: string;
   updatedAt?: string;
 
-  // relations
   product?: Product;
   variants?: ProductVariant;
 }
@@ -66,7 +64,6 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
 
-  // relations
   variants?: ProductVariant[];
   images?: ProductImage[];
   categories?: Category[];

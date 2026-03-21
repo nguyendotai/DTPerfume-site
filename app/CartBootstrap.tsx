@@ -19,7 +19,6 @@ export default function CartBootstrap() {
   useEffect(() => {
     if (!token) return;
 
-    // 🔥 Có local cart → sync lên server
     if (localItems.length > 0) {
       dispatch(syncCartThunk({ items: localItems }))
         .unwrap()

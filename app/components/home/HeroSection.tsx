@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getHomeBrands } from "@/app/service/brand.service";
 import { Brand } from "@/app/types/brand";
 
-// Slider animation (trượt ngang)
 const slideVariants = {
   enter: (direction: number) => ({
     x: direction > 0 ? "100%" : "-100%",

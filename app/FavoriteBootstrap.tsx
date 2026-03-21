@@ -16,7 +16,6 @@ export default function FavoriteBootstrap() {
   useEffect(() => {
     if (!token) return;
 
-    // 🔥 Có local cart → sync lên server
     if (localItems.length > 0) {
       dispatch(syncFavoriteThunk({ items: localItems }))
         .unwrap()

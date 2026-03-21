@@ -63,7 +63,6 @@ export default function Header() {
     token ? state.favorite.items.length : state.favoriteLocal.items.length,
   );
 
-  // 🔍 Fetch gợi ý khi gõ
   useEffect(() => {
     if (!searchQuery.trim()) {
       setSuggestions([]);
@@ -86,7 +85,6 @@ export default function Header() {
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
 
-  // 👇 Click ngoài dropdown thì đóng
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {

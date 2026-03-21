@@ -52,7 +52,6 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const isFavorited = Boolean(favoriteItem);
 
-  // ===== IMAGE =====
   const image =
     images.find((img) => img.is_main)?.url ||
     images[0]?.url ||
@@ -71,7 +70,6 @@ export default function ProductCard({ product }: ProductCardProps) {
         ? Number(firstVariant.discount_price)
         : Number(firstVariant.price);
 
-    // 🔥 CHƯA LOGIN → LOCAL CART
     if (!isLoggedIn) {
       dispatch(
         addLocalItem({
@@ -90,7 +88,6 @@ export default function ProductCard({ product }: ProductCardProps) {
       return;
     }
 
-    // 🔥 ĐÃ LOGIN → API
     toast.loading("Đang thêm vào giỏ hàng...", { id: "add-cart" });
 
     dispatch(
@@ -119,7 +116,6 @@ export default function ProductCard({ product }: ProductCardProps) {
 
     const variantId = firstVariant.id;
 
-    // 🔥 CHƯA LOGIN → LOCAL FAVORITE
     if (!isLoggedIn) {
       if (isFavorited) {
         dispatch(removeLocalFavoriteItem(variantId));
@@ -146,7 +142,6 @@ export default function ProductCard({ product }: ProductCardProps) {
       return;
     }
 
-    // 🔥 ĐÃ LOGIN → API
     if (isFavorited && favoriteItem && "id" in favoriteItem) {
       // ❌ Xóa
       dispatch(removeFavoriteItemThunk(favoriteItem.id))

@@ -5,7 +5,7 @@ import { forwardRef, ReactNode } from "react";
 
 interface MotionSectionProps extends HTMLMotionProps<"section"> {
   children: ReactNode;
-  delay?: number;           // optional delay cho stagger parent
+  delay?: number;         
 }
 
 const defaultVariants = {
@@ -27,7 +27,7 @@ const MotionSection = forwardRef<HTMLElement, MotionSectionProps>(
         ref={ref}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.18 }} // ~18% vào viewport thì trigger
+        viewport={{ once: true, amount: 0.18 }} 
         variants={defaultVariants}
         transition={{ delay }}
         className={className}

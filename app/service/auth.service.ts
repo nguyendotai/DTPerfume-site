@@ -3,7 +3,7 @@ import {
   RegisterPayload,
   UpdateProfilePayload,
 } from "../types/auth";
-import { authMock } from "../mock/auth.mock"; // đổi đúng path mock của bạn
+import { authMock } from "../mock/auth.mock"; 
 
 const AUTH_ENDPOINT = "/auth";
 
