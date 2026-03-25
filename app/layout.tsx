@@ -1,6 +1,7 @@
 import "./globals.css";
 import Providers from "./providers";
 import { Toaster } from "react-hot-toast";
+import SocketListener from "./components/ui/SocketListener";
 
 export const metadata = {
   title: "DTPerfumeshop",
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="vi">
       <body className="bg-gray-50 text-gray-900">
         <Providers>
+          <SocketListener />
           {children}
           <Toaster position="top-right" />
         </Providers>

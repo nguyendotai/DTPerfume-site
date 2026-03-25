@@ -11,6 +11,7 @@ import { clearLocalCart } from "@/app/store/slices/cart.local.slice";
 import { useRouter } from "next/navigation";
 import { searchProducts } from "@/app/service/product.service";
 import { Product } from "@/app/types/product";
+import { Bell } from "lucide-react";
 
 const CATEGORY_MENU = [
   { label: "Deal Thơm", slug: "deal-thom" },
@@ -34,6 +35,12 @@ export default function Header() {
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const { unreadCount, list } = useSelector(
+    (state: RootState) => state.notification,
+  );
+
+  const [openNoti, setOpenNoti] = useState(false);
 
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -337,6 +344,42 @@ export default function Header() {
                 </span>
               )}
             </Link>
+            <div className="relative top-1">
+              <button
+                onClick={() => setOpenNoti(!openNoti)}
+                className="relative text-gray-700 hover:text-[#d4af37]"
+              >
+                <Bell size={24} />
+
+                {unreadCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* DROPDOWN */}
+              {openNoti && (
+                <div className="absolute right-0 mt-3 w-80 bg-white shadow-2xl rounded-xl border p-2 z-50">
+                  {list.length === 0 ? (
+                    <p className="p-3 text-sm text-gray-500">
+                      Không có thông báo
+                    </p>
+                  ) : (
+                    list.map((n) => (
+                      <div
+                        key={n.id}
+                        className={`p-3 rounded-lg text-sm mb-1 ${
+                          n.read ? "bg-gray-100" : "bg-blue-50"
+                        }`}
+                      >
+                        {n.message}
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

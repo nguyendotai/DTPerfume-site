@@ -72,7 +72,7 @@ export default function CartPage() {
     if (isAuthenticated) {
       dispatch(getCartThunk());
     }
-  }, []); // 👈 CHỈ CHẠY 1 LẦN KHI VÀO PAGE
+  }, []); 
 
   const subtotal = cartItems.reduce((sum, item) => {
     if (isAuthenticated) {
