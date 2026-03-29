@@ -1,10 +1,28 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerThunk } from "@/app/store/thunks/auth.thunk";
 import { AppDispatch, RootState } from "@/app/store";
 import { useRouter } from "next/navigation";
+
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z
+  .object({
+    name: z.string().min(2, "Tên tối thiểu 2 ký tự"),
+    email: z.string().email("Email không hợp lệ"),
+    password: z.string().min(6, "Mật khẩu tối thiểu 6 ký tự"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Mật khẩu xác nhận không khớp",
+    path: ["confirmPassword"],
+  });
+
+type FormData = z.infer<typeof schema>;
 
 const authImages = [
   "https://thumbs.dreamstime.com/b/elegant-glass-perfume-bottle-filled-amber-liquid-glowing-warmly-under-light-surrounded-swirling-smoke-bokeh-lights-403723199.jpg", 
@@ -18,34 +36,23 @@ const authImages = [
 ];
 
 export default function RegisterPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
   const { loading, error, registerSuccess } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
 
-    if (password !== confirmPassword) {
-      alert("Mật khẩu xác nhận không khớp!");
-      return;
-    }
-
-    dispatch(
-      registerThunk({
-        name,
-        email,
-        password,
-        confirmPassword,
-      })
-    );
+  const onSubmit = (data: FormData) => {
+    dispatch(registerThunk(data));
   };
 
   useEffect(() => {
@@ -56,7 +63,7 @@ export default function RegisterPage() {
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden">
-      {/* Background slideshow */}
+      {/* Background giữ nguyên */}
       <div className="absolute inset-0">
         {authImages.map((img, index) => (
           <div
@@ -70,21 +77,11 @@ export default function RegisterPage() {
         ))}
         <style jsx>{`
           @keyframes fadeInOut {
-            0% {
-              opacity: 0;
-            }
-            5% {
-              opacity: 1;
-            }
-            20% {
-              opacity: 1;
-            }
-            25% {
-              opacity: 0;
-            }
-            100% {
-              opacity: 0;
-            }
+            0% { opacity: 0; }
+            5% { opacity: 1; }
+            20% { opacity: 1; }
+            25% { opacity: 0; }
+            100% { opacity: 0; }
           }
           .animate-fadeInOut {
             animation: fadeInOut 40s infinite;
@@ -94,80 +91,100 @@ export default function RegisterPage() {
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
 
-      {/* Register Form */}
       <div className="relative min-h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-md">
           <div className="bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl p-10 border border-white/20">
-            <h1 className="text-5xl font-extrabold text-white text-center tracking-widest mb-8 drop-shadow-lg">
+            <h1 className="text-5xl font-extrabold text-white text-center mb-8">
               DT Perfume
             </h1>
+
             <p className="text-xl text-white/90 text-center mb-10 italic">
               Tham gia cùng chúng tôi
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Name */}
               <div>
                 <label className="block text-white/80 text-sm mb-2">
                   Họ & tên
                 </label>
                 <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-5 py-4 rounded-full bg-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-amber-400 transition"
+                  {...register("name")}
+                  className="w-full px-5 py-4 rounded-full bg-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-amber-400"
                   placeholder="Nguyễn Văn A"
                 />
+                {errors.name && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
 
+              {/* Email */}
               <div>
                 <label className="block text-white/80 text-sm mb-2">
                   Email
                 </label>
                 <input
                   type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-5 py-4 rounded-full bg-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-amber-400 transition"
+                  {...register("email")}
+                  className="w-full px-5 py-4 rounded-full bg-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-amber-400"
                   placeholder="nhap@email.com"
                 />
+                {errors.email && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
+              {/* Password */}
               <div>
                 <label className="block text-white/80 text-sm mb-2">
                   Mật khẩu
                 </label>
                 <input
                   type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-5 py-4 rounded-full bg-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-amber-400 transition"
+                  {...register("password")}
+                  className="w-full px-5 py-4 rounded-full bg-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-amber-400"
                   placeholder="••••••••"
                 />
+                {errors.password && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
 
+              {/* Confirm Password */}
               <div>
                 <label className="block text-white/80 text-sm mb-2">
                   Xác nhận mật khẩu
                 </label>
                 <input
                   type="password"
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-5 py-4 rounded-full bg-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-amber-400 transition"
+                  {...register("confirmPassword")}
+                  className="w-full px-5 py-4 rounded-full bg-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-amber-400"
                   placeholder="••••••••"
                 />
+                {errors.confirmPassword && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
 
               <button
                 type="submit"
-                className="w-full py-4 rounded-full text-xl font-semibold text-white bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-700 hover:to-amber-700 transition-all shadow-lg hover:scale-105"
+                disabled={loading}
+                className="w-full py-4 rounded-full text-xl font-semibold text-white bg-gradient-to-r from-rose-600 to-amber-600 disabled:opacity-50"
               >
-                Đăng ký
+                {loading ? "Đang đăng ký..." : "Đăng ký"}
               </button>
+
+              {error && (
+                <p className="text-red-400 text-center mt-4">{error}</p>
+              )}
             </form>
 
             <p className="text-center text-white/70 mt-8">
