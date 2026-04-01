@@ -1,10 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { LoginPayload, RegisterPayload, UpdateProfilePayload } from "@/app/types/auth";
-import { loginService, registerService, getMeService, updateProfileService } from "@/app/service/auth.service";
+import { loginService, registerService, getMeService, updateProfileService, logoutService } from "@/app/service/auth.service";
 import { syncCartThunk, getCartThunk } from "./cart.thunks";
 import { getLocalCart, clearLocalCart } from "@/app/utils/cartLocal";
 
-/* LOGIN */
 export const loginThunk = createAsyncThunk(
   "auth/login",
   async (payload: LoginPayload) => {
@@ -12,7 +11,6 @@ export const loginThunk = createAsyncThunk(
   }
 );
 
-/* REGISTER */
 export const registerThunk = createAsyncThunk(
   "auth/register",
   async (payload: RegisterPayload) => {
@@ -20,22 +18,23 @@ export const registerThunk = createAsyncThunk(
   }
 );
 
-/* GET ME */
 export const getMeThunk = createAsyncThunk(
   "auth/me",
-  async (token: string) => {
-    return await getMeService(token);
+  async () => {
+    return await getMeService(); 
   }
 );
 
-/* UPDATE */
 export const updateProfileThunk = createAsyncThunk(
   "auth/update",
-  async (
-    payload: UpdateProfilePayload,
-    { getState }
-  ) => {
-    const state: any = getState();
-    return await updateProfileService(payload, state.auth.token);
+  async (payload: UpdateProfilePayload) => {
+    return await updateProfileService(payload);
+  }
+);
+
+export const logoutThunk = createAsyncThunk(
+  "auth/logout",
+  async () => {
+    return await logoutService();
   }
 );

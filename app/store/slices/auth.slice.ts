@@ -5,11 +5,11 @@ import {
   registerThunk,
   getMeThunk,
   updateProfileThunk,
+  logoutThunk,
 } from "../thunks/auth.thunk";
 
 interface AuthState {
   user: AuthUser | null;
-  token: string | null;
   loading: boolean;
   error: string | null;
   registerSuccess: boolean;
@@ -17,7 +17,6 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
   loading: false,
   error: null,
   registerSuccess: false,
@@ -26,14 +25,7 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    logout(state) {
-      state.user = null;
-      state.token = null;
-      state.registerSuccess = false;
-      localStorage.removeItem("token");
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       // LOGIN
@@ -43,9 +35,7 @@ const authSlice = createSlice({
       })
       .addCase(loginThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload.token;
         state.user = action.payload.user;
-        localStorage.setItem("token", action.payload.token);
       })
       .addCase(loginThunk.rejected, (state, action) => {
         state.loading = false;
@@ -76,9 +66,12 @@ const authSlice = createSlice({
       // UPDATE PROFILE
       .addCase(updateProfileThunk.fulfilled, (state, action) => {
         state.user = action.payload.user;
+      })
+
+      .addCase(logoutThunk.fulfilled, (state) => {
+        state.user = null;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
 export default authSlice.reducer;

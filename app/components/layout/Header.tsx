@@ -5,13 +5,14 @@ import { Search, ShoppingBag, User, X, LogOut, Heart } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
-import { logout } from "@/app/store/slices/auth.slice";
+import { logoutThunk } from "@/app/store/thunks/auth.thunk";
 import { resetCart } from "@/app/store/slices/cart.slice";
 import { clearLocalCart } from "@/app/store/slices/cart.local.slice";
 import { useRouter } from "next/navigation";
 import { searchProducts } from "@/app/service/product.service";
 import { Product } from "@/app/types/product";
 import { Bell } from "lucide-react";
+import { AppDispatch } from "@/app/store";
 
 const CATEGORY_MENU = [
   { label: "Deal Thơm", slug: "deal-thom" },
@@ -24,10 +25,10 @@ const CATEGORY_MENU = [
 ];
 
 export default function Header() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const { user, token } = useSelector((state: RootState) => state.auth);
-  const isLoggedIn = Boolean(token);
+  const { user } = useSelector((state: RootState) => state.auth);
+  const isLoggedIn = Boolean(user);
   const userEmail = user?.email;
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -35,6 +36,7 @@ export default function Header() {
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  
 
   const { unreadCount, list } = useSelector(
     (state: RootState) => state.notification,
@@ -54,20 +56,21 @@ export default function Header() {
     }
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    await dispatch(logoutThunk());
     dispatch(resetCart());
     dispatch(clearLocalCart());
+    router.push("/"); 
   };
 
   const cartCount = useSelector((state: RootState) =>
-    token
+    user
       ? state.cart.items.reduce((sum, i) => sum + i.quantity, 0)
       : state.cartLocal.items.reduce((sum, i) => sum + i.quantity, 0),
   );
 
   const wishlistCount = useSelector((state: RootState) =>
-    token ? state.favorite.items.length : state.favoriteLocal.items.length,
+    user ? state.favorite.items.length : state.favoriteLocal.items.length,
   );
 
   useEffect(() => {

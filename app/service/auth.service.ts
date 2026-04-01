@@ -18,6 +18,7 @@ export const loginService = async (payload: LoginPayload) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        credentials: "include", // 🔥 QUAN TRỌNG
       }
     );
 
@@ -50,14 +51,15 @@ export const registerService = async (payload: RegisterPayload) => {
 };
 
 /* GET ME */
-export const getMeService = async (token: string) => {
+export const getMeService = async () => {
   if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
     return authMock.getMe();
   } else {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}${AUTH_ENDPOINT}/me`,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        method: "GET",
+        credentials: "include", // 🔥 QUAN TRỌNG
       }
     );
 
@@ -70,8 +72,7 @@ export const getMeService = async (token: string) => {
 
 /* UPDATE PROFILE */
 export const updateProfileService = async (
-  payload: UpdateProfilePayload,
-  token: string
+  payload: UpdateProfilePayload
 ) => {
   if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
     return authMock.updateProfile(payload);
@@ -82,9 +83,9 @@ export const updateProfileService = async (
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
+        credentials: "include", // 🔥 QUAN TRỌNG
       }
     );
 
@@ -94,4 +95,20 @@ export const updateProfileService = async (
 
     return data;
   }
+};
+
+/* LOGOUT */
+export const logoutService = async () => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}${AUTH_ENDPOINT}/logout`,
+    {
+      method: "POST",
+      credentials: "include", 
+    }
+  );
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Logout thất bại!");
+
+  return data;
 };

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginThunk } from "@/app/store/thunks/auth.thunk";
+import { getMeThunk, loginThunk } from "@/app/store/thunks/auth.thunk";
 import { AppDispatch, RootState } from "@/app/store";
 import { useRouter } from "next/navigation";
 import { syncCartThunk, getCartThunk } from "@/app/store/thunks/cart.thunks";
@@ -25,7 +25,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const authImages = [
-  "https://thumbs.dreamstime.com/b/elegant-glass-perfume-bottle-filled-amber-liquid-glowing-warmly-under-light-surrounded-swirling-smoke-bokeh-lights-403723199.jpg", 
+  "https://thumbs.dreamstime.com/b/elegant-glass-perfume-bottle-filled-amber-liquid-glowing-warmly-under-light-surrounded-swirling-smoke-bokeh-lights-403723199.jpg",
   "https://thumbs.dreamstime.com/b/elegant-glass-perfume-bottle-filled-amber-liquid-glowing-warmly-under-light-surrounded-swirling-smoke-bokeh-lights-403723204.jpg",
   "https://thumbs.dreamstime.com/b/elegant-perfume-bottle-faceted-cap-sits-reflective-surface-bottle-filled-dark-amber-liquid-its-398485361.jpg",
   "https://thumbs.dreamstime.com/b/elegant-perfume-bottle-golden-accents-smoke-dark-background-exquisite-design-details-swirling-against-black-perfect-393616658.jpg",
@@ -39,7 +39,7 @@ export default function LoginPage() {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
-  const { token, loading, error } = useSelector(
+  const { user, loading, error } = useSelector(
     (state: RootState) => state.auth,
   );
 
@@ -51,12 +51,16 @@ export default function LoginPage() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: FormData) => {
-    dispatch(loginThunk(data));
+  const onSubmit = async (data: FormData) => {
+    const res = await dispatch(loginThunk(data));
+
+    if (loginThunk.fulfilled.match(res)) {
+      await dispatch(getMeThunk()); 
+    }
   };
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
 
     const handleSync = async () => {
       const localCart = JSON.parse(localStorage.getItem("cart_local") || "[]");
@@ -92,7 +96,7 @@ export default function LoginPage() {
     };
 
     handleSync();
-  }, [token]);
+  }, [user]);
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden">
@@ -110,11 +114,21 @@ export default function LoginPage() {
         ))}
         <style jsx>{`
           @keyframes fadeInOut {
-            0% { opacity: 0; }
-            5% { opacity: 1; }
-            20% { opacity: 1; }
-            25% { opacity: 0; }
-            100% { opacity: 0; }
+            0% {
+              opacity: 0;
+            }
+            5% {
+              opacity: 1;
+            }
+            20% {
+              opacity: 1;
+            }
+            25% {
+              opacity: 0;
+            }
+            100% {
+              opacity: 0;
+            }
           }
           .animate-fadeInOut {
             animation: fadeInOut 40s infinite;
