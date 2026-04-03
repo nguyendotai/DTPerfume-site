@@ -21,8 +21,7 @@ import {
 } from "../service/category.service";
 import { CategoryWithProducts } from "../components/home/CategoryProductsSection";
 
-// Import wrapper (client component)
-import MotionSection from "../components/motion/MotionSection"; // điều chỉnh path cho đúng
+import MotionSection from "../components/motion/MotionSection"; 
 
 export default async function HomePage() {
   const [

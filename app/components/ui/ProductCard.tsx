@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, ShoppingCart, Eye } from "lucide-react";
+import { Heart, ShoppingCart, Eye, Scale } from "lucide-react";
 import { useState } from "react";
 import { Product } from "@/app/types/product";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,11 @@ import {
   addLocalFavoriteItem,
   removeLocalFavoriteItem,
 } from "@/app/store/slices/favorite.local.slice";
+import {
+  addToCompare,
+  removeFromCompare,
+} from "@/app/store/slices/compare.slice";
+import { AppDispatch } from "@/app/store";
 
 interface ProductCardProps {
   product: Product;
@@ -30,16 +35,12 @@ export default function ProductCard({ product }: ProductCardProps) {
   const images = product.images ?? [];
   const variants = product.variants ?? [];
 
-  const dispatch = useDispatch<any>();
-  const token = useSelector((state: RootState) => state.auth.token);
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const isLoggedIn = Boolean(user);
 
   const firstVariant = variants[0];
 
-  const isLoggedIn = Boolean(
-    token && token !== "null" && token !== "undefined",
-  );
-
-  // ===== FAVORITE STATE =====
   const localFavoriteItems = useSelector(
     (state: RootState) => state.favoriteLocal.items,
   );
@@ -51,6 +52,10 @@ export default function ProductCard({ product }: ProductCardProps) {
     : localFavoriteItems.find((item) => item.variant_id === firstVariant?.id);
 
   const isFavorited = Boolean(favoriteItem);
+
+  const compareItems = useSelector((state: RootState) => state.compare.items);
+
+  const isCompared = compareItems.some((item) => item.id === product.id);
 
   const image =
     images.find((img) => img.is_main)?.url ||
@@ -163,6 +168,24 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   };
 
+  const handleCompare = () => {
+    const isAlready = compareItems.some((item) => item.id === product.id);
+
+    if (isAlready) {
+      dispatch(removeFromCompare(product.id));
+      toast.success("Đã xóa khỏi so sánh");
+      return;
+    }
+
+    if (compareItems.length >= 4) {
+      toast.error("Chỉ so sánh tối đa 4 sản phẩm");
+      return;
+    }
+
+    dispatch(addToCompare(product));
+    toast.success("Đã thêm vào so sánh");
+  };
+
   // ===== PRICE RANGE =====
   const prices = variants
     .map((v) =>
@@ -265,6 +288,19 @@ export default function ProductCard({ product }: ProductCardProps) {
               className="p-2 border rounded-full hover:bg-gray-800 hover:text-white transition"
             >
               <Eye size={16} />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCompare();
+              }}
+              className={`p-2 border rounded-full transition ${
+                isCompared
+                  ? "bg-blue-500 text-white border-blue-500"
+                  : "hover:bg-blue-500 hover:text-white"
+              }`}
+            >
+              <Scale size={16} />
             </button>
           </div>
         </div>

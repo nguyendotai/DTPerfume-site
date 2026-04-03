@@ -5,6 +5,7 @@ import cartLocalReducer from "./slices/cart.local.slice";
 import favoriteReducer from "./slices/favorite.slice";
 import favoriteLocalReducer from "./slices/favorite.local.slice";
 import notificationReducer from "./slices/notification.slice";
+import compareReducer from "./slices/compare.slice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     favorite: favoriteReducer,
     favoriteLocal: favoriteLocalReducer,
     notification: notificationReducer,
+    compare: compareReducer,
   },
 });
 
