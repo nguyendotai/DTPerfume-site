@@ -8,7 +8,7 @@ import { Order } from "@/app/types/order";
 import Link from "next/link";
 
 export default function OrdersPage() {
-  const { user, token } = useSelector((state: RootState) => state.auth);
+  const { user} = useSelector((state: RootState) => state.auth);
   const userId = user?.id;
 
   const [orders, setOrders] = useState<Order[]>([]);
@@ -34,7 +34,7 @@ export default function OrdersPage() {
     fetchOrders();
   }, [userId]);
 
-  if (!token) {
+  if (!user) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12 text-center">
         <h2 className="text-xl font-semibold mb-3">

@@ -14,7 +14,7 @@ export default function ComparePage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
-        <div className="text-center">
+        <div className="text-center">c
           <Scale className="mx-auto mb-6 text-zinc-300" size={80} strokeWidth={1} />
           <p className="text-3xl text-zinc-400 font-light">Chưa có sản phẩm để so sánh</p>
           <p className="text-zinc-500 mt-3 text-lg">Thêm sản phẩm để khám phá sự khác biệt</p>
