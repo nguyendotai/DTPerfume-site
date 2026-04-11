@@ -11,13 +11,13 @@ import { clearLocalCart } from "@/app/store/slices/cart.local.slice";
 
 export default function CartBootstrap() {
   const dispatch = useDispatch<any>();
-  const token = useSelector((state: RootState) => state.auth.token);
+  const user = useSelector((state: RootState) => state.auth.user);
   const localItems = useSelector(
     (state: RootState) => state.cartLocal.items
   );
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
 
     if (localItems.length > 0) {
       dispatch(syncCartThunk({ items: localItems }))
@@ -29,7 +29,7 @@ export default function CartBootstrap() {
     } else {
       dispatch(getCartThunk());
     }
-  }, [token, dispatch]);
+  }, [user, dispatch]);
 
   return null;
 }

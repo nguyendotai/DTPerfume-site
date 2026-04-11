@@ -7,13 +7,11 @@ import { getMeThunk } from "@/app/store/thunks/auth.thunk";
 
 function AuthBootstrap() {
   const dispatch = useDispatch<any>();
-  const token = useSelector((state: RootState) => state.auth.token);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
-    if (token) {
-      dispatch(getMeThunk(token));
-    }
-  }, [token, dispatch]);
+  dispatch(getMeThunk());
+}, [dispatch]);
 
   return null;
 }

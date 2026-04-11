@@ -8,8 +8,7 @@ import toast from "react-hot-toast";
 
 export default function ProfilePage() {
   const dispatch = useDispatch<any>();
-  const { user, token, loading } = useSelector((state: RootState) => state.auth);
-
+  const { user, loading } = useSelector((state: RootState) => state.auth);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -19,10 +18,8 @@ export default function ProfilePage() {
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
-    if (token) {
-      dispatch(getMeThunk(token));
-    }
-  }, [dispatch, token]);
+  dispatch(getMeThunk());
+}, [dispatch]);
 
   useEffect(() => {
     if (user) {
@@ -62,7 +59,7 @@ export default function ProfilePage() {
     }
   };
 
-  if (!token) {
+  if (!user) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-md">

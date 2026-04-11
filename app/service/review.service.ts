@@ -5,8 +5,7 @@ const REVIEW_ENDPOINT = "/reviews";
 
 /* CREATE REVIEW */
 export async function createReviewService(
-  payload: { product_id: number; rating: number; comment: string },
-  token: string,
+  payload: { product_id: number; rating: number; comment: string }
 ) {
   if (USE_MOCK) {
     const newReview = {
@@ -23,8 +22,8 @@ export async function createReviewService(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
+    credentials: "include", // 🔥 QUAN TRỌNG
     body: JSON.stringify(payload),
   });
 

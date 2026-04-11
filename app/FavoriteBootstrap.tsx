@@ -8,13 +8,13 @@ import { clearLocalFavorite } from "./store/slices/favorite.local.slice";
 
 export default function FavoriteBootstrap() {
   const dispatch = useDispatch<any>();
-  const token = useSelector((state: RootState) => state.auth.token);
+  const user = useSelector((state: RootState) => state.auth.user);
   const localItems = useSelector(
     (state: RootState) => state.cartLocal.items
   );
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
 
     if (localItems.length > 0) {
       dispatch(syncFavoriteThunk({ items: localItems }))
@@ -26,7 +26,7 @@ export default function FavoriteBootstrap() {
     } else {
       dispatch(getFavoriteThunk());
     }
-  }, [token, dispatch]);
+  }, [user, dispatch]);
 
   return null;
 }

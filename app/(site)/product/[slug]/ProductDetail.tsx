@@ -17,7 +17,8 @@ interface Props {
 }
 
 export default function ProductDetailClient({ product }: Props) {
-  const { token, user } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
+  const isLoggedIn = Boolean(user);
 
   const [reviews, setReviews] = useState(product.reviews || []);
   const [ratingInput, setRatingInput] = useState(5);
@@ -45,21 +46,18 @@ export default function ProductDetailClient({ product }: Props) {
       : null;
 
   const handleSubmitReview = async () => {
-    if (!token) {
+    if (!user) {
       alert("Vui lòng đăng nhập để đánh giá!");
       return;
     }
 
     try {
       setLoadingReview(true);
-      await createReviewService(
-        {
-          product_id: product.id,
-          rating: ratingInput,
-          comment: commentInput,
-        },
-        token,
-      );
+      await createReviewService({
+        product_id: product.id,
+        rating: ratingInput,
+        comment: commentInput,
+      });
 
       const res = await getReviewsByProductService(product.id);
       setReviews(res.reviews);
@@ -348,7 +346,7 @@ export default function ProductDetailClient({ product }: Props) {
         </h2>
 
         {/* FORM REVIEW */}
-        {token && (
+        {user && (
           <div className="mb-10 bg-white border border-amber-200 rounded-xl p-6 shadow-sm">
             <h3 className="font-semibold text-lg mb-4">
               Viết đánh giá của bạn
